@@ -37,20 +37,20 @@ diff_3_1_end = abs(round((s1_end - s3_end)))
 print('1 vs 3', diff_3_1_start, diff_3_1_end)
 
 # 3 sensors, same param
-# df = pd.DataFrame({
-#     "x": range(1, ss_min),
-#     sensors[0]: s1[s1.index < ss_min-1]['PM25'],
-#     sensors[1]: s2[s2.index < ss_min-1]['PM25'],
-#     sensors[2]: s3[s3.index < ss_min-1]['PM25'],
-# })
-
-# same sensor, 3 values
 df = pd.DataFrame({
     "x": range(1, ss_min),
-    "PM25": s1['PM25'],
-    "TEM": s1['TEM'],
-    "RH": s1['RH'],
+    sensors[0]: s1[s1.index < ss_min-1]['PM25'],
+    sensors[1]: s2[s2.index < ss_min-1]['PM25'],
+    sensors[2]: s3[s3.index < ss_min-1]['PM25'],
 })
+
+# same sensor, 3 values
+# df = pd.DataFrame({
+#     "x": range(1, ss_min),
+#     "PM25": s1[s1 < s1[ss_min]]['PM25'],
+#     "TEM": s1[s1 < s1[ss_min]]['TEM'],
+#     "RH": s1[s1 < s1[ss_min]]['RH'],
+# })
 
 # Change the style of plot
 plt.style.use('seaborn-darkgrid')
