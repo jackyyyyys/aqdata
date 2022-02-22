@@ -1,7 +1,8 @@
-from datetime import datetime
+import datetime
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns; sns.set()  # for plot styling 
 
 sensors = ['98F4AB39DB50', '98F4AB38C884', '4C11AEE82D80']
 params = ['CO2', 'VOC', 'RH', 'TEM', 'PM25']

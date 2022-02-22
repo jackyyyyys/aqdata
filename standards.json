@@ -1,0 +1,56 @@
+{
+    "CO2": [
+        {
+            "from": 0,
+            "to": 1000,
+            "remarks": "Concentrations typical of occupied indoor spaces with good air exchange"
+        },
+        {
+            "from": 1001,
+            "to": 2000,
+            "remarks": "Complaints of drowsiness and poor air."
+        },
+        {
+            "from": 2001,
+            "to": -1,
+            "remarks": "Headaches, sleepiness and stagnant, stale, stuffy air. Poor concentration, loss of attention, increased heart rate and slight nausea may also be prese"
+        }
+    ],
+    "CO2_source": "https://www.kane.co.uk/knowledge-centre/what-are-safe-levels-of-co-and-co2-in-rooms",
+    "VOC": [
+        {
+            "from": 0,
+            "to": 250,
+            "remarks": "The VOC contents in the air are low."
+        },
+        {
+            "from": 251,
+            "to": 2000,
+            "remarks": "Look for VOC sources if this average level persists for a month."
+        },
+        {
+            "from": 2001,
+            "to": -1,
+            "remarks": "The VOC contents are very high - consider taking action/ventilating right now."
+        }
+    ],
+    "VOC_source": "https://www.airthings.com/en/what-is-voc",
+    "pm2.5": [
+        {
+            "from": 0,
+            "to": 12,
+            "remarks": "Good"
+        },
+        {
+            "from": 12.1,
+            "to": 35.4,
+            "remarks": "Moderate"
+        },
+        {
+            "from": 35.5,
+            "to": -1,
+            "remarks": "Unhealthy for sensitive"
+        }
+    ],
+    "pm2.5_source": "https://blissair.com/what-is-pm-2-5.htm"
+}
