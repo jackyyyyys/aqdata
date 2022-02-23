@@ -35,7 +35,7 @@
         }
     ],
     "VOC_source": "https://www.airthings.com/en/what-is-voc",
-    "pm2.5": [
+    "PM25": [
         {
             "from": 0,
             "to": 12,

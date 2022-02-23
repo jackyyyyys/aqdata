@@ -1,8 +1,9 @@
-import datetime
+from datetime import datetime
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns; sns.set()  # for plot styling 
+PARAM = "CO2"
 
 sensors = ['98F4AB39DB50', '98F4AB38C884', '4C11AEE82D80']
 params = ['CO2', 'VOC', 'RH', 'TEM', 'PM25']
@@ -40,9 +41,9 @@ print('1 vs 3', diff_3_1_start, diff_3_1_end)
 # 3 sensors, same param
 df = pd.DataFrame({
     "x": range(1, ss_min),
-    sensors[0]: s1[s1.index < ss_min-1]['PM25'],
-    sensors[1]: s2[s2.index < ss_min-1]['PM25'],
-    sensors[2]: s3[s3.index < ss_min-1]['PM25'],
+    sensors[0]: s1[s1.index < ss_min-1][PARAM],
+    sensors[1]: s2[s2.index < ss_min-1][PARAM],
+    sensors[2]: s3[s3.index < ss_min-1][PARAM],
 })
 
 # same sensor, 3 values
