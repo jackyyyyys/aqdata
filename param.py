@@ -1,17 +1,26 @@
 from datetime import datetime
 import numpy as np
+from scipy import stats
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns; sns.set()  # for plot styling 
-PARAM = "CO2"
+PARAM = "PM25"
 
 sensors = ['98F4AB39DB50', '98F4AB38C884', '4C11AEE82D80']
 params = ['CO2', 'VOC', 'RH', 'TEM', 'PM25']
 
 # Make a data frame
-s1 = pd.read_csv(f'./{sensors[0]}.csv')
-s2 = pd.read_csv(f'./{sensors[1]}.csv')
-s3 = pd.read_csv(f'./{sensors[2]}.csv')
+s1 = pd.read_csv(f'./{sensors[0]}_light.csv')
+s2 = pd.read_csv(f'./{sensors[1]}_light.csv')
+s3 = pd.read_csv(f'./{sensors[2]}_light.csv')
+
+# sns.boxplot(s1['PM25'])
+
+# zs = stats.zscore(s1)
+# abs_z_scores = np.abs(zs)
+# filtered_entries = (abs_z_scores < 3).all()
+# new_s1 = s1[filtered_entries]
+# print(new_s1.describe())
 
 ss_min = min(len(s1), len(s2), len(s3))
 ss_max = max(len(s1), len(s2), len(s3))
@@ -43,7 +52,7 @@ df = pd.DataFrame({
     "x": range(1, ss_min),
     sensors[0]: s1[s1.index < ss_min-1][PARAM],
     sensors[1]: s2[s2.index < ss_min-1][PARAM],
-    sensors[2]: s3[s3.index < ss_min-1][PARAM],
+    # sensors[2]: s3[s3.index < ss_min-1][PARAM],
 })
 
 # same sensor, 3 values

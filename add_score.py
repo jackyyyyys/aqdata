@@ -38,7 +38,8 @@ def score_pm25(pm25):
         return 3
 
 def score_total(co2, voc, pm25):
-    grade = score_co2(co2) + score_voc(voc) + score_pm25(pm25)
+    # not specific enough
+    # grade = score_co2(co2) + score_voc(voc) + score_pm25(pm25)
     return grade
 
 grades = []
