@@ -14,7 +14,7 @@ s1 = pd.read_csv(f'./{sensors[0]}_light.csv')
 s2 = pd.read_csv(f'./{sensors[1]}_light.csv')
 s3 = pd.read_csv(f'./{sensors[2]}_light.csv')
 
-# sns.boxplot(s1['PM25'])
+sns.boxplot(s1['PM25'])
 
 # zs = stats.zscore(s1)
 # abs_z_scores = np.abs(zs)
@@ -74,6 +74,7 @@ num = 0
 for column in df.drop('x', axis=1):
     num+=1
     plt.plot(df['x'], df[column], marker='', color = palette(num), linewidth = 1, alpha = 0.9, label = column)
+
 
 # Add legend
 plt.legend(loc = 2, ncol = 2)
