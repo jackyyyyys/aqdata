@@ -53,4 +53,5 @@ for i in range(len(sensor)):
 
 print(sensors[SENSOR_ID-1])
 df = pd.DataFrame(grades)
-print(df.describe()) 
+# remove some cols, add some cols
+df.to_csv(f'{sensors[SENSOR_ID-1]}-processed.csv')
