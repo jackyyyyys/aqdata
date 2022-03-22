@@ -1,13 +1,11 @@
-from datetime import datetime
 import json
-import numpy as np
+from collections import Counter
 import pandas as pd
-import matplotlib.pyplot as plt
 import seaborn as sns; sns.set()  # for plot styling 
 
-SENSOR_ID = 1
-CO2_SCORES =    [ 1 , 3 , 5 ]
-VOC_SCORES =    [ 1 , 2 , 3 ] # sensor value is directly used atm
+SENSOR_ID = 3
+CO2_SCORES =    [ 1 , 2 , 3 ]
+VOC_SCORES =    [ 1 , 3 , 5 ] # sensor value is directly used atm
 PM25_SCORES =   [ 1 , 3 , 5 ]
 
 sensors = ['98F4AB39DB50', '98F4AB38C884', '4C11AEE82D80']
@@ -22,7 +20,7 @@ def score_co2(co2):
         return CO2_SCORES[1]
     elif (co2 >= standards['CO2'][2]['from'] & co2 <= standards['CO2'][2]['to']):
         return CO2_SCORES[2]
-
+        
 def score_voc(voc):
     # if (voc >= standards['VOC'][0]['from'] & voc <= standards['VOC'][0]['to']):
     #     return 1
@@ -41,11 +39,12 @@ def score_pm25(pm25):
         return PM25_SCORES[2]
 
 def score_total(co2, voc, pm25):
+    # not specific enough
     grade = score_co2(co2) + score_voc(voc) + score_pm25(pm25)
     return grade
 
 grades = []
-for i in range(len(sensor)):
+for i in range(1,    len(sensor)):
     grade = score_total(sensor.loc[i]['CO2'], sensor.loc[i]['VOC'], sensor.loc[i]['PM25'])
     grades.append(grade)
     print(' ', i, " / ", len(sensor), end='\r')
@@ -53,5 +52,10 @@ for i in range(len(sensor)):
 
 print(sensors[SENSOR_ID-1])
 df = pd.DataFrame(grades)
+# print(df.describe())
+print("CO2: ", CO2_SCORES)
+print("VOC: ", VOC_SCORES)
+print("PM2.5: ", PM25_SCORES)
+print (Counter(grades))
 # remove some cols, add some cols
-df.to_csv(f'{sensors[SENSOR_ID-1]}-processed.csv')
+# df.to_csv(f'{sensors[SENSOR_ID-1]}-processed.csv')

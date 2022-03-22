@@ -10,9 +10,9 @@ day = 1574
 eg_day = [9926, 11580]
 
 # Make a data frame
-s1 = pd.read_csv(f'./{sensors[0]}.csv')
-s2 = pd.read_csv(f'./{sensors[1]}.csv')
-s3 = pd.read_csv(f'./{sensors[2]}.csv')
+s1 = pd.read_csv(f'../resources/{sensors[0]}_light.csv')
+s2 = pd.read_csv(f'../resources/{sensors[1]}_light.csv')
+s3 = pd.read_csv(f'../resources/{sensors[2]}_light.csv')
 print("s1", s1.describe())
 print("s2", s2.describe())
 print("s3", s3.describe())

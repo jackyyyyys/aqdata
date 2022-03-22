@@ -10,9 +10,9 @@ sensors = ['98F4AB39DB50', '98F4AB38C884', '4C11AEE82D80']
 params = ['CO2', 'VOC', 'RH', 'TEM', 'PM25']
 
 # Make a data frame
-s1 = pd.read_csv(f'./{sensors[0]}_light.csv')
-s2 = pd.read_csv(f'./{sensors[1]}_light.csv')
-s3 = pd.read_csv(f'./{sensors[2]}_light.csv')
+s1 = pd.read_csv(f'../resources/{sensors[0]}_light.csv')
+s2 = pd.read_csv(f'../resources/{sensors[1]}_light.csv')
+s3 = pd.read_csv(f'../resources/{sensors[2]}_light.csv')
 
 sns.boxplot(s1['PM25'])
 

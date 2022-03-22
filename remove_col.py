@@ -1,7 +1,7 @@
 import pandas as pd
 
 TO_DELETE = ["sensor_id", 'db_id', 'ALM']
-SENSOR = 3
+SENSOR = 1
 
 sensors = ['98F4AB39DB50', '98F4AB38C884', '4C11AEE82D80']
 
