@@ -3,7 +3,7 @@ from collections import Counter
 import pandas as pd
 import seaborn as sns; sns.set()  # for plot styling 
 
-SENSOR_ID =     1
+SENSOR_ID =     3
 CO2_SCORES =    [ 1 , 2 , 3 ]
 VOC_SCORES =    [ 1 , 3 , 5 ] # sensor value is directly used atm
 PM25_SCORES =   [ 1 , 3 , 5 ]
@@ -44,23 +44,22 @@ def score_total(co2, voc, pm25):
     grade = score_co2(co2) + score_voc(voc) + score_pm25(pm25)
     return grade
 
+print("Sensor", SENSOR_ID, sensors[SENSOR_ID-1])
 grades = []
-for i in range(1, len(sensor)):
+for i in range(0, len(sensor)):
     grade = score_total(sensor.loc[i]['CO2'], sensor.loc[i]['VOC'], sensor.loc[i]['PM25'])
     grades.append(grade)
     print(' ', i, " / ", len(sensor), end='\r')
-# print(grades, end=" ")
+    print(grades[i], end=" ")
 
-print(sensors[SENSOR_ID-1])
-# df = pd.DataFrame(grades)
-# print(df.describe())
+print('\n')
 print("CO2: ", CO2_SCORES)
 print("VOC: ", VOC_SCORES)
 print("PM2.5: ", PM25_SCORES)
 print (Counter(grades))
 
 # append score to end
-# with ASSIGN
-# ValueError: Length of values (68251) does not match length of index (68252)
-light['SCORE'] = grades
-light.to_csv(f'{sensors[SENSOR_ID-1]}-processed.csv')
+light.insert(len(light.columns), 'SCORE', grades)
+
+# NO DOESNT WORK
+light.to_csv(f'{sensors[SENSOR_ID-1]}-processed.csv', index=False)
