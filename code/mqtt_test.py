@@ -5,7 +5,6 @@ import time
 import json
 from enum import Enum
 import ssl
-
 import paho.mqtt.client as mqtt
 
 # Constants
