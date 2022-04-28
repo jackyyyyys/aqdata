@@ -1,16 +1,13 @@
 from matplotlib.pyplot import axis
 import numpy as np
 import pandas as pd
-np.set_printoptions(precision=3, suppress=True)
 import tensorflow as tf
-from tensorflow import keras
 
 #################################################################
 sensor = 3
 test_row = 33333
 #################################################################
-
-# Regression using a DNN and multiple inputs
+# Regression using DNN with multiple inputs
 
 def quality(sensor, CO2, VOC, RH, TEM, PM25):
     model = tf.keras.models.load_model(f'dnn_model_sensor_{int(sensor)}')
@@ -35,3 +32,4 @@ def test():
     print(f'{test_row}: {original_score} | {prediction}')
 
 # test()
+# /quality/3,417,0,68.6,23.8,518
