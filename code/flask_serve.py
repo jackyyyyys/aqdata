@@ -10,5 +10,8 @@ def index(params):
     prediction = quality(*paramf)
     return str(prediction)
 
-# set FLASK_APP=flask_test
-# py -m flask run
+"""
+RUN
+set FLASK_APP=flask_serve
+py -m flask run
+"""
