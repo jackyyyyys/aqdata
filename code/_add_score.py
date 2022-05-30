@@ -56,7 +56,7 @@ print('\n')
 print("CO2: ", CO2_SCORES)
 print("VOC: ", VOC_SCORES)
 print("PM2.5: ", PM25_SCORES)
-print (Counter(grades))
+print(Counter(grades))
 
 # append score to end
 light.insert(len(light.columns), 'SCORE', grades)
