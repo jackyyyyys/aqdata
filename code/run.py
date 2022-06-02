@@ -17,26 +17,20 @@ MQTT_PASSWORD = 'device1HKU'
 
 MQTT_CERT = '../mq.crt'
 
-def publish(client):
-    msg_count = 0
-    while True:
-        time.sleep(1)
-        msg = f"messages: {msg_count}"
-        result = client.publish(MQTT_TOPIC_PUBLISH, msg)
-        # result: [0, 1]
-        status = result[0]
-        if status == 0:
-            print(f"Send `{msg}` to topic `{MQTT_TOPIC_PUBLISH}`")
-        else:
-            print(f"Failed to send message to topic {MQTT_TOPIC_PUBLISH}")
-        msg_count += 1
-
+def publish(client, message):
+    result = client.publish(MQTT_TOPIC_PUBLISH, message)
+    # result: [0, 1]
+    status = result[0]
+    if status == 0:
+        print(f"Send `{message}` to topic `{MQTT_TOPIC_PUBLISH}`")
+    else:
+        print(f"Failed to send message to topic {MQTT_TOPIC_PUBLISH}")
 
 def subscribe(client: mqtt_client):
     def on_message(client, userdata, msg):
         print(f"Received `{msg.payload.decode()}` from `{msg.topic}` topic")
         # !!! here put use ML model code
-        client.publish(client, "TEST")
+        publish(client, "TEST")
 
     client.subscribe(MQTT_TOPIC_SUBSCRIBE)
     client.on_message = on_message
@@ -59,8 +53,8 @@ def mqtt_connect() -> mqtt_client:
 
 def run():
     client = mqtt_connect()
-    client.loop_start()
-    publish(client)
+    subscribe(client)
+    client.loop_forever()
 
 if __name__ == '__main__':
     run()
