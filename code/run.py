@@ -11,57 +11,61 @@ import random
 import pandas as pd
 from test_use_model import quality
 
-# how to get to know which sensor
-# sub hku/sensor + switch or sub 3 topics?
-TEMP_SESOR = "98F4AB38C884"
+### retracing warning
 source = 'https://www.emqx.com/en/blog/how-to-use-mqtt-in-python'
-sensor = TEMP_SESOR
 
-SENSORS = { '4C11AEE82D80': 1, '98F4AB38C884': 2, '98F4AB39DB50': 3 }
+sensors = ['4C11AEE82D80', '98F4AB38C884', '98F4AB39DB50']
 MQTT_HOST = 'sphku.com'
 MQTT_PORT = 8883
-MQTT_TOPIC_SUBSCRIBE = f'hku/sensor/{sensor}/data'
-MQTT_TOPIC_PUBLISH = f'hku/sensor/{sensor}/ranking'
+MQTT_TOPIC_SUBSCRIBE = [
+                        (f'hku/sensor/{sensors[0]}/data', 0),
+                        (f'hku/sensor/{sensors[1]}/data', 0),
+                        (f'hku/sensor/{sensors[2]}/data', 0)
+                    ]
+MQTT_TOPIC_PUBLISH = 'hku/sensor/{sensor}/ranking'
 MQTT_CLIENT_ID = f'python-mqtt-{random.randint(0, 1000)}'
 MQTT_USERNAME = 'device1'
 MQTT_PASSWORD = 'device1HKU'
 MQTT_CERT = '../mq.crt'
 
-def publish(client, message):
-    result = client.publish(MQTT_TOPIC_PUBLISH, message)
+def mqtt_publish(client, topic, message):
+    result = client.publish(topic, message)
     # result: [0, 1]
     status = result[0]
     if status == 0:
-        print(f"Send `{message}` to `{MQTT_TOPIC_PUBLISH}`")
+        print(f"Send `{message}` to `{topic}`")
     else:
-        print(f"Failed to send message to {MQTT_TOPIC_PUBLISH}")
+        print(f"Failed to send message to {topic}")
 
-def subscribe(client: mqtt_client):
+def mqtt_subscribe(client: mqtt_client):
+    def on_subscribe(client, userdata, mid, granted_qos):
+        print('Subscription running ', mid, granted_qos)
+
     def on_message(client, userdata, msg):
-        print(f"Received `{msg.payload.decode()}` from `{msg.topic}`")
+        print(f"Received `{json.loads(msg.payload)}` from `{msg.topic}`")
+        sensor = msg.topic[11:23]
         rank_req = json.loads(msg.payload)
-        print(rank_req)
-        # using traied ML model
-        rank = quality(2, rank_req['CO2'], rank_req['VOC'], rank_req['RH'], rank_req['TEM'], rank_req['PM25'])
-        print(rank)
+        rank = quality(sensors.index(sensor)+1, rank_req['CO2'], rank_req['VOC'], rank_req['RH'], rank_req['TEM'], rank_req['PM25'])
+        print(f'Prediction of sensor {sensor} > Rank: {rank}')
         rank_res = {
             'sensor': sensor,
             'ts': rank_req['TIME'],
             'rank': int(round(rank))
         }
-        publish(client, json.dumps(rank_res))
+        mqtt_publish(client, MQTT_TOPIC_PUBLISH.replace('{sensor}', sensor), json.dumps(rank_res))
 
     # subscribe to 
     client.subscribe(MQTT_TOPIC_SUBSCRIBE)
 
     client.on_message = on_message
+    client.on_subscribe = on_subscribe
 
 def mqtt_connect() -> mqtt_client:
     def on_connect(mq, data, rc, _):
         if rc == 0:
             print("Connected to MQTT Broker!")
         else:
-            print("Failed to connect, return code %d\n", rc)
+            print(f"Failed to connect, return code {rc}")
         print('mqtt connected')
 
     mqttClient = mqtt_client.Client(MQTT_CLIENT_ID)
@@ -74,7 +78,7 @@ def mqtt_connect() -> mqtt_client:
 
 def run():
     client = mqtt_connect()
-    subscribe(client)
+    mqtt_subscribe(client)
     client.loop_forever()
 
 if __name__ == '__main__':
