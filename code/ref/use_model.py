@@ -16,7 +16,7 @@ def quality(sensor, CO2, VOC, RH, TEM, PM25):
 
 def test():
     sensors = ['98F4AB39DB50', '98F4AB38C884', '4C11AEE82D80']
-    csv = f"../{sensors[sensor -1]}-processed.csv"
+    csv = f"../resources/{sensors[sensor -1]}-processed.csv"
     raw_dataset = pd.read_csv(csv)
     dataset = raw_dataset.copy()
     dataset = dataset.drop('TIME', axis=1)

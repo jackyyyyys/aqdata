@@ -1,39 +1,31 @@
-import json
-from flask import session
-from matplotlib.font_manager import json_dump
-import numpy
-import paho.mqtt.client as mqtt_client
-import datetime
-import time
 import ssl
-from enum import Enum
+import json
 import random
-import pandas as pd
-from test_use_model import quality
+import tensorflow as tf
+import paho.mqtt.client as mqtt_client
 
 ### retracing warning
-source = 'https://www.emqx.com/en/blog/how-to-use-mqtt-in-python'
 
 sensors = ['4C11AEE82D80', '98F4AB38C884', '98F4AB39DB50']
 MQTT_HOST = 'sphku.com'
 MQTT_PORT = 8883
-MQTT_TOPIC_SUBSCRIBE = [
-                        (f'hku/sensor/{sensors[0]}/data', 0),
-                        (f'hku/sensor/{sensors[1]}/data', 0),
-                        (f'hku/sensor/{sensors[2]}/data', 0)
-                    ]
-MQTT_TOPIC_PUBLISH = 'hku/sensor/{sensor}/ranking'
 MQTT_CLIENT_ID = f'python-mqtt-{random.randint(0, 1000)}'
 MQTT_USERNAME = 'device1'
 MQTT_PASSWORD = 'device1HKU'
 MQTT_CERT = '../mq.crt'
+MQTT_TOPIC_SUBSCRIBE = [(f'hku/sensor/{sensors[0]}/data', 0), (f'hku/sensor/{sensors[1]}/data', 0), (f'hku/sensor/{sensors[2]}/data', 0)]
+MQTT_TOPIC_PUBLISH = 'hku/sensor/{sensor}/rank'
+
+def get_ranking(sensor, CO2, VOC, RH, TEM, PM25):
+    model = tf.keras.models.load_model(f'dnn_model_sensor_{int(sensor)}')
+    prediction = model.predict([(CO2, VOC, RH, TEM, PM25)], verbose = 0)[0][0]
+    return prediction
 
 def mqtt_publish(client, topic, message):
     result = client.publish(topic, message)
-    # result: [0, 1]
     status = result[0]
     if status == 0:
-        print(f"Send `{message}` to `{topic}`")
+        print(f"Sent `{message}` to `{topic}`")
     else:
         print(f"Failed to send message to {topic}")
 
@@ -45,8 +37,8 @@ def mqtt_subscribe(client: mqtt_client):
         print(f"Received `{json.loads(msg.payload)}` from `{msg.topic}`")
         sensor = msg.topic[11:23]
         rank_req = json.loads(msg.payload)
-        rank = quality(sensors.index(sensor)+1, rank_req['CO2'], rank_req['VOC'], rank_req['RH'], rank_req['TEM'], rank_req['PM25'])
-        print(f'Prediction of sensor {sensor} > Rank: {rank}')
+        rank = get_ranking(sensors.index(sensor)+1, rank_req['CO2'], rank_req['VOC'], rank_req['RH'], rank_req['TEM'], rank_req['PM25'])
+        print(f'Predict sensor {sensor} > Rank: {rank}')
         rank_res = {
             'sensor': sensor,
             'ts': rank_req['TIME'],
@@ -54,9 +46,7 @@ def mqtt_subscribe(client: mqtt_client):
         }
         mqtt_publish(client, MQTT_TOPIC_PUBLISH.replace('{sensor}', sensor), json.dumps(rank_res))
 
-    # subscribe to 
     client.subscribe(MQTT_TOPIC_SUBSCRIBE)
-
     client.on_message = on_message
     client.on_subscribe = on_subscribe
 

@@ -62,4 +62,4 @@ print(Counter(grades))
 light.insert(len(light.columns), 'SCORE', grades)
 
 # NO DOESNT WORK
-light.to_csv(f'{sensors[SENSOR_ID-1]}-processed.csv', index=False)
+light.to_csv(f'../resources/{sensors[SENSOR_ID-1]}-processed.csv', index=False)

@@ -1,0 +1,22 @@
+{
+    "subscribe": {
+        "topic": "hku/sensor/{sensor}/data",
+        "body": {
+            "CO2": 485,
+            "VOC": 0,
+            "RH": 30.5,
+            "TEM": 24.2,
+            "PM25": 535,
+            "ALM": 0,
+            "TIME": 1654511409
+        }
+    },
+    "publish": {
+        "topic": "hku/sensor/{sensor}/rank",
+        "body": {
+            "sensor": "4C11AEE82D80",
+            "ts": 1654511409,
+            "rank": 4
+        }
+    }
+}
